@@ -1,0 +1,22 @@
+PODS:
+  - adder (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - adder (from `.symlinks/plugins/adder/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  adder:
+    :path: ".symlinks/plugins/adder/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  adder: 819ef5a6f06d85379e2e69c4e59f2c4af5c66b4c
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+
+COCOAPODS: 1.8.4

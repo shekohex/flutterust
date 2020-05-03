@@ -1,0 +1,115 @@
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+CARGO_MAKE_WORKSPACE_INCLUDE_MEMBERS = ["native/adder-ffi"]
+ANDROID_PLATFORM_VERSION = "28"
+
+[tasks.build]
+description = "Runs the rust compiler."
+category = "Build"
+command = "cargo"
+args = ["build", "--all-features"]
+dependencies = ["android"]
+
+[tasks.build.mac]
+description = "Runs the rust compiler."
+category = "Build"
+command = "cargo"
+args = ["build", "--all-features"]
+dependencies = ["android", "ios", "post-ios"]
+
+[tasks.ios]
+condition = { platforms = ["mac"] }
+description = "Build ios targets."
+category = "Build"
+command = "cargo"
+args = ["lipo"]
+
+[tasks.post-ios]
+condition = { platforms = ["mac"] }
+script = [
+    """
+    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/universal/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.a \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/ios/lib${CARGO_MAKE_CRATE_FS_NAME}.a
+    """,
+    """
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/binding.h \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/ios/Classes/binding.h
+    """,
+]
+
+[tasks.android]
+description = "Build android targets."
+category = "Build"
+dependencies = [
+    "pre-android",
+    "android-aarch64",
+    "post-android-aarch64",
+    "android-armv7",
+    "post-android-armv7",
+    "android-i686",
+    "post-android-i686",
+]
+
+[tasks.android-aarch64]
+command = "cargo"
+args = [
+  "ndk", 
+  "--platform", 
+  "${ANDROID_PLATFORM_VERSION}", 
+  "--target", 
+  "aarch64-linux-android", 
+  "build",
+  ]
+
+[tasks.android-armv7]
+command = "cargo"
+args = [
+  "ndk", 
+  "--platform", 
+  "${ANDROID_PLATFORM_VERSION}", 
+  "--target", 
+  "armv7-linux-androideabi", 
+  "build",
+  ]
+
+[tasks.android-i686]
+command = "cargo"
+args = [
+  "ndk", 
+  "--platform", 
+  "${ANDROID_PLATFORM_VERSION}", 
+  "--target", 
+  "i686-linux-android", 
+  "build"
+  ]
+
+[tasks.pre-android]
+script = [
+    "mkdir -p ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a",
+    "mkdir -p ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a",
+    "mkdir -p ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86",
+]
+
+[tasks.post-android-aarch64]
+script = [
+    """
+    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/aarch64-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
+    """,
+]
+
+[tasks.post-android-armv7]
+script = [
+  """
+  ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/armv7-linux-androideabi/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+  ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
+  """,
+]
+
+[tasks.post-android-i686]
+script = [
+    """
+    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/i686-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86/lib${CARGO_MAKE_CRATE_FS_NAME}.so
+    """,
+]
