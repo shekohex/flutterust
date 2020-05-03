@@ -1,6 +1,6 @@
 # Flutterust
 
-Flutter + Rust = :love:
+Flutter + Rust = :heart:
 
 Using Rust libs from Flutter using [`dart:ffi`](https://dart.dev/guides/libraries/c-interop)
 
