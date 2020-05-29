@@ -3,6 +3,9 @@ CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 CARGO_MAKE_WORKSPACE_INCLUDE_MEMBERS = ["native/adder-ffi"]
 ANDROID_PLATFORM_VERSION = "28"
 
+[tasks.test-flow]
+disabled = true
+
 [tasks.build]
 description = "Runs the rust compiler."
 category = "Build"
