@@ -79,9 +79,9 @@ pub unsafe extern "C" fn destroy_runtime(runtime: RuntimePtr) -> i32 {
 pub extern "C" fn load_page(
     runtime: RuntimePtr,
     url: *const raw::c_char,
-    resolve: fn(*mut raw::c_char) -> (),
-    reject: fn(*mut raw::c_char) -> (),
-    log: fn(*mut raw::c_char) -> (),
+    resolve: extern "C" fn(*mut raw::c_char) -> (),
+    reject: extern "C" fn(*mut raw::c_char) -> (),
+    log: extern "C" fn(*mut raw::c_char) -> (),
 ) -> i32 {
     null_pointer_check!(runtime);
     null_pointer_check!(url);
@@ -94,8 +94,8 @@ pub extern "C" fn load_page(
 
 async fn run_load_page(
     url: &str,
-    resolve: fn(*mut raw::c_char) -> (),
-    reject: fn(*mut raw::c_char) -> (),
+    resolve: extern "C" fn(*mut raw::c_char) -> (),
+    reject: extern "C" fn(*mut raw::c_char) -> (),
 ) {
     let result = scrap::load_page(url).await;
     match result {
