@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:adder/adder.dart';
+import 'package:scrap/scrap.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,10 +27,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final scrap = Scrap();
   void _incrementCounter() {
     setState(() {
       _counter = widget.adder.add(_counter, 1);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadRustHomePage();
   }
 
   @override
@@ -48,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
@@ -59,5 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void loadRustHomePage() async {
+    debugPrint('Loading..');
+    final html = await scrap.loadPage('https://www.rust-lang.org/');
+    debugPrint(html);
   }
 }

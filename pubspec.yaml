@@ -11,6 +11,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   adder:
     path: packages/adder_ffi
+  scrap:
+    path: packages/scrap_ffi
 
 dev_dependencies:
   flutter_test:

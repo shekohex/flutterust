@@ -1,5 +1,5 @@
 [package]
-name = "scrap_ffi"
+name = "scrap-ffi"
 version = "0.1.0"
 authors = ["Shady Khalifa <shekohex@gmail.com>"]
 edition = "2018"
@@ -9,7 +9,9 @@ name = "scrap_ffi"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-adder = { path = "../scrap" }
+scrap = { path = "../scrap" }
+tokio = { version = "0.2", features = ["rt-threaded"] }
+ffi_helpers = "0.2"
 
 [build-dependencies]
 cbindgen = "0.14.2"
