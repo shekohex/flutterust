@@ -1,0 +1,15 @@
+[package]
+name = "scrap_ffi"
+version = "0.1.0"
+authors = ["Shady Khalifa <shekohex@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "scrap_ffi"
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+adder = { path = "../scrap" }
+
+[build-dependencies]
+cbindgen = "0.14.2"
