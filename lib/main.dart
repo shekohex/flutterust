@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final scrap = Scrap();
+  Scrap scrap;
   void _incrementCounter() {
     setState(() {
       _counter = widget.adder.add(_counter, 1);
@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    scrap = Scrap();
     loadRustHomePage();
   }
 

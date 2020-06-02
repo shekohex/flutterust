@@ -49,7 +49,11 @@ final errorMessageUtf8 = _dl.lookupFunction<
   'error_message_utf8',
 );
 
-final setupRuntime = _dl.lookupFunction<Pointer Function(), Pointer Function()>(
+final setupRuntime = _dl.lookupFunction<
+    Pointer Function(
+        Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>),
+    Pointer Function(
+        Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>)>(
   'setup_runtime',
 );
 
@@ -66,21 +70,9 @@ final destroyRuntime = _dl.lookupFunction<
 final loadPage = _dl.lookupFunction<loadPageC, loadPageDart>(
   'load_page',
 );
-typedef loadPageC = Int32 Function(
-  Pointer,
-  Pointer<Utf8>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-);
+typedef loadPageC = Int32 Function(Pointer, Pointer<Utf8>, Int64);
 
-typedef loadPageDart = int Function(
-  Pointer,
-  Pointer<Utf8>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-  Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>,
-);
+typedef loadPageDart = int Function(Pointer, Pointer<Utf8>, int);
 
 void dartPrint(Pointer<Utf8> msg) {
   print(Utf8.fromUtf8(msg));

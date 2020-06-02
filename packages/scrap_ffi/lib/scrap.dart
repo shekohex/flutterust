@@ -1,32 +1,22 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
+import 'package:isolate/ports.dart';
 
 import 'ffi.dart' as native;
 
 class Scrap {
-  static final Pointer _rt = native.setupRuntime();
-  static Completer<String> completer;
-  Scrap() {
-    completer = Completer();
-  }
+  static final Pointer _rt = native.setupRuntime(NativeApi.postCObject);
   Future<String> loadPage(String url) {
-    final resolveFP =
-        Pointer.fromFunction<Void Function(Pointer<Utf8>)>(_resolve);
-
-    final rejectFP =
-        Pointer.fromFunction<Void Function(Pointer<Utf8>)>(_reject);
-    final logFP =
-        Pointer.fromFunction<Void Function(Pointer<Utf8>)>(native.dartPrint);
     var urlPointer = Utf8.toUtf8(url);
-    var res = native.loadPage(
+    final completer = Completer<String>();
+    final sendPort = singleCompletePort(completer);
+
+    final res = native.loadPage(
       _rt,
       urlPointer,
-      resolveFP,
-      rejectFP,
-      logFP,
+      sendPort.nativePort,
     );
-    print(res);
     if (res != 1) {
       _throwError();
     }
@@ -46,14 +36,4 @@ class Scrap {
     print(error);
     throw error;
   }
-}
-
-void _resolve(Pointer<Utf8> body) {
-  print("Resolved!");
-  Scrap.completer.complete(Utf8.fromUtf8(body));
-}
-
-void _reject(Pointer<Utf8> error) {
-  print("Rejected");
-  Scrap.completer.completeError(Utf8.fromUtf8(error));
 }
