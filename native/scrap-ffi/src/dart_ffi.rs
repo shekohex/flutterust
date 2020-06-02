@@ -87,37 +87,37 @@ pub union DartCObjectValue {
     pub as_int64: i64,
     pub as_double: f64,
     pub as_string: *mut raw::c_char,
-    pub as_send_port: DartSendPort,
-    pub as_capability: DartCapability,
-    pub as_array: DartArray,
-    pub as_typed_data: DartTypedData,
-    pub as_external_typed_data: DartExternalTypedData,
+    pub as_send_port: DartNativeSendPort,
+    pub as_capability: DartNativeCapability,
+    pub as_array: DartNativeArray,
+    pub as_typed_data: DartNativeTypedData,
+    pub as_external_typed_data: DartNativeExternalTypedData,
     _bindgen_union_align: [u64; 5usize],
 }
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct DartSendPort {
+pub struct DartNativeSendPort {
     pub id: DartPort,
     pub origin_id: DartPort,
 }
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct DartCapability {
+pub struct DartNativeCapability {
     pub id: i64,
 }
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct DartArray {
+pub struct DartNativeArray {
     pub length: isize,
     pub values: *mut *mut DartCObject,
 }
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct DartTypedData {
+pub struct DartNativeTypedData {
     pub type_: DartTypedDataType,
     pub length: isize,
     pub values: *mut u8,
@@ -125,7 +125,7 @@ pub struct DartTypedData {
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct DartExternalTypedData {
+pub struct DartNativeExternalTypedData {
     pub type_: DartTypedDataType,
     pub length: isize,
     pub data: *mut u8,

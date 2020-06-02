@@ -22,7 +22,11 @@
  * Dart_WeakPersistentHandleFinalizer callback; a non-NULL callback must be
  * provided.
  */
-enum DartCObjectType {
+enum DartCObjectType
+#ifdef __cplusplus
+  : int32_t
+#endif // __cplusplus
+ {
   DartNull = 0,
   DartBool = 1,
   DartInt32 = 2,
@@ -37,9 +41,15 @@ enum DartCObjectType {
   DartUnsupported = 11,
   DartNumberOfTypes = 12,
 };
+#ifndef __cplusplus
 typedef int32_t DartCObjectType;
+#endif // __cplusplus
 
-enum DartTypedDataType {
+enum DartTypedDataType
+#ifdef __cplusplus
+  : int32_t
+#endif // __cplusplus
+ {
   kByteData = 0,
   kInt8 = 1,
   kUint8 = 2,
@@ -55,7 +65,9 @@ enum DartTypedDataType {
   kFloat32x4 = 12,
   kInvalid = 13,
 };
+#ifndef __cplusplus
 typedef int32_t DartTypedDataType;
+#endif // __cplusplus
 
 typedef void *RuntimePtr;
 
@@ -64,27 +76,27 @@ typedef void *RuntimePtr;
  */
 typedef int64_t DartPort;
 
-typedef struct {
+typedef struct DartNativeSendPort {
   DartPort id;
   DartPort origin_id;
-} DartSendPort;
+} DartNativeSendPort;
 
-typedef struct {
+typedef struct DartNativeCapability {
   int64_t id;
-} DartCapability;
+} DartNativeCapability;
 
-typedef struct {
+typedef struct DartNativeArray {
   intptr_t length;
   DartCObject **values;
-} DartArray;
+} DartNativeArray;
 
-typedef struct {
+typedef struct DartNativeTypedData {
   DartTypedDataType type_;
   intptr_t length;
   uint8_t *values;
-} DartTypedData;
+} DartNativeTypedData;
 
-typedef struct {
+typedef struct _DartWeakPersistentHandle {
   uint8_t _unused[0];
 } _DartWeakPersistentHandle;
 
@@ -92,29 +104,29 @@ typedef _DartWeakPersistentHandle *DartWeakPersistentHandle;
 
 typedef void (*DartWeakPersistentHandleFinalizer)(void *isolate_callback_data, DartWeakPersistentHandle handle, void *peer);
 
-typedef struct {
+typedef struct DartNativeExternalTypedData {
   DartTypedDataType type_;
   intptr_t length;
   uint8_t *data;
   void *peer;
   DartWeakPersistentHandleFinalizer callback;
-} DartExternalTypedData;
+} DartNativeExternalTypedData;
 
-typedef union {
+typedef union DartCObjectValue {
   bool as_bool;
   int32_t as_int32;
   int64_t as_int64;
   double as_double;
   char *as_string;
-  DartSendPort as_send_port;
-  DartCapability as_capability;
-  DartArray as_array;
-  DartTypedData as_typed_data;
-  DartExternalTypedData as_external_typed_data;
+  DartNativeSendPort as_send_port;
+  DartNativeCapability as_capability;
+  DartNativeArray as_array;
+  DartNativeTypedData as_typed_data;
+  DartNativeExternalTypedData as_external_typed_data;
   uint64_t _bindgen_union_align[5];
 } DartCObjectValue;
 
-typedef struct {
+typedef struct DartCObject {
   DartCObjectType type_;
   DartCObjectValue value;
 } DartCObject;
@@ -136,6 +148,10 @@ typedef struct {
  */
 typedef bool (*DartPostCObjectFnPtr)(DartPort port_id, DartCObject *message);
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 /**
  * Destroy the Tokio Runtime, and return 1 if everything is okay
  */
@@ -151,3 +167,7 @@ int32_t load_page(RuntimePtr runtime, const char *url, DartPort port_id);
  * Setup a new Tokio Runtime and return a pointer to it so it could be used later to run tasks
  */
 RuntimePtr setup_runtime(DartPostCObjectFnPtr post_cobject);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
