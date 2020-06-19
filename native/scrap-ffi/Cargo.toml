@@ -16,3 +16,4 @@ allo-isolate = "0.1"
 
 [build-dependencies]
 cbindgen = "0.14.2"
+dart-bindgen = "0.1"
