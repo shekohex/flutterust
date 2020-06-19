@@ -29,9 +29,10 @@ args = ["lipo"]
 
 [tasks.post-ios]
 condition = { platforms = ["mac"] }
+script_runner = "@duckscript"
 script = [
     """
-    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/universal/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.a \
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/universal/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.a \
     ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/ios/lib${CARGO_MAKE_CRATE_FS_NAME}.a
     """,
     """
@@ -90,6 +91,7 @@ args = [
   ]
 
 [tasks.pre-android]
+script_runner = "@duckscript"
 script = [
     "mkdir -p ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a",
     "mkdir -p ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a",
@@ -97,25 +99,28 @@ script = [
 ]
 
 [tasks.post-android-aarch64]
+script_runner = "@duckscript"
 script = [
     """
-    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/aarch64-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/aarch64-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
     ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
     """,
 ]
 
 [tasks.post-android-armv7]
+script_runner = "@duckscript"
 script = [
   """
-  ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/armv7-linux-androideabi/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+  cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/armv7-linux-androideabi/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
   ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
   """,
 ]
 
 [tasks.post-android-i686]
+script_runner = "@duckscript"
 script = [
     """
-    ln -sf ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/i686-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/i686-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
     ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86/lib${CARGO_MAKE_CRATE_FS_NAME}.so
     """,
 ]
