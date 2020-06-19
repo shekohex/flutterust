@@ -12,6 +12,7 @@ crate-type = ["cdylib", "staticlib"]
 scrap = { path = "../scrap" }
 tokio = { version = "0.2", features = ["rt-threaded"] }
 ffi_helpers = "0.2"
+allo-isolate = "0.1"
 
 [build-dependencies]
 cbindgen = "0.14.2"

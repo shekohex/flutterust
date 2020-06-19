@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     scrap = Scrap();
+    Scrap.setup();
     loadRustHomePage();
   }
 

@@ -49,11 +49,16 @@ final errorMessageUtf8 = _dl.lookupFunction<
   'error_message_utf8',
 );
 
-final setupRuntime = _dl.lookupFunction<
-    Pointer Function(
-        Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>),
-    Pointer Function(
-        Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>)>(
+typedef dartPostCObject = Pointer Function(
+    Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>);
+
+// assumes that _dl is the `DynamicLibrary`
+final storeDartPostCObject =
+    _dl.lookupFunction<dartPostCObject, dartPostCObject>(
+  'store_dart_post_cobject',
+);
+
+final setupRuntime = _dl.lookupFunction<Pointer Function(), Pointer Function()>(
   'setup_runtime',
 );
 

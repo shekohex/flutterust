@@ -6,7 +6,12 @@ import 'package:isolate/ports.dart';
 import 'ffi.dart' as native;
 
 class Scrap {
-  static final Pointer _rt = native.setupRuntime(NativeApi.postCObject);
+  static setup() {
+    native.storeDartPostCObject(NativeApi.postCObject);
+    print("Scrap Setup Done");
+  }
+
+  static final Pointer _rt = native.setupRuntime();
   Future<String> loadPage(String url) {
     var urlPointer = Utf8.toUtf8(url);
     final completer = Completer<String>();
