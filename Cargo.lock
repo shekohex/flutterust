@@ -732,6 +732,7 @@ dependencies = [
  "cbindgen 0.14.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dart-bindgen 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "ffi_helpers 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scrap 0.1.0",
  "tokio 0.2.21 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

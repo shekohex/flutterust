@@ -1,7 +1,7 @@
 /// bindings for `libaddr`
 
-import 'dart:ffi';
 import 'dart:io';
+import 'dart:ffi';
 import 'package:ffi/ffi.dart' as ffi;
 
 // ignore_for_file: unused_import, camel_case_types, non_constant_identifier_names
@@ -19,7 +19,6 @@ int add(
 ) {
   return _add(a, b);
 }
-
 final _add_Dart _add = _dl.lookupFunction<_add_C, _add_Dart>('add');
 typedef _add_C = Int64 Function(
   Int64 a,

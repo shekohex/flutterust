@@ -39,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     scrap = Scrap();
     Scrap.setup();
-    loadRustHomePage();
   }
 
   @override
@@ -59,6 +58,17 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const SizedBox(height: 100),
+            RaisedButton(
+              color: Colors.greenAccent,
+              child: Text(
+                'Scrape rust-lang.org',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: _showWebPage,
+            )
           ],
         ),
       ),
@@ -70,9 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void loadRustHomePage() async {
-    debugPrint('Loading..');
+  void _showWebPage() async {
     final html = await scrap.loadPage('https://www.rust-lang.org/');
-    debugPrint(html);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      builder: (context) => SingleChildScrollView(
+        child: Text(html),
+      ),
+    );
   }
 }

@@ -1,8 +1,8 @@
 /// bindings for `libscrap`
 
 import 'dart:ffi';
-import 'dart:io';
 import 'package:ffi/ffi.dart' as ffi;
+import 'dart:io';
 
 // ignore_for_file: unused_import, camel_case_types, non_constant_identifier_names
 final DynamicLibrary _dl = _open();
@@ -11,55 +11,6 @@ DynamicLibrary _open() {
   if (Platform.isIOS) return DynamicLibrary.executable();
   throw UnsupportedError('This platform is not supported.');
 }
-
-/// <p class="para-brief"> Destroy the Tokio Runtime, and return 1 if everything is okay</p>
-int destroy_runtime(
-  Pointer runtime,
-) {
-  return _destroy_runtime(runtime);
-}
-
-final _destroy_runtime_Dart _destroy_runtime =
-    _dl.lookupFunction<_destroy_runtime_C, _destroy_runtime_Dart>(
-        'destroy_runtime');
-typedef _destroy_runtime_C = Int32 Function(
-  Pointer runtime,
-);
-typedef _destroy_runtime_Dart = int Function(
-  Pointer runtime,
-);
-
-/// <p class="para-brief"> Setup a new Tokio Runtime and return a pointer to it so it could be used later to run tasks</p>
-Pointer setup_runtime() {
-  return _setup_runtime();
-}
-
-final _setup_runtime_Dart _setup_runtime =
-    _dl.lookupFunction<_setup_runtime_C, _setup_runtime_Dart>('setup_runtime');
-typedef _setup_runtime_C = Pointer Function();
-typedef _setup_runtime_Dart = Pointer Function();
-
-/// C function `load_page`.
-int load_page(
-  Pointer runtime,
-  Pointer<ffi.Utf8> url,
-  int port_id,
-) {
-  return _load_page(runtime, url, port_id);
-}
-
-final _load_page_Dart _load_page =
-    _dl.lookupFunction<_load_page_C, _load_page_Dart>('load_page');
-typedef _load_page_C = Int32 Function(
-  Pointer runtime,
-  Pointer<ffi.Utf8> url,
-  Int64 port_id,
-);
-typedef _load_page_Dart = int Function(
-  Pointer runtime,
-  Pointer<ffi.Utf8> url,
-  int port_id,
-);
 
 /// C function `error_message_utf8`.
 int error_message_utf8(
@@ -79,6 +30,25 @@ typedef _error_message_utf8_C = Int32 Function(
 typedef _error_message_utf8_Dart = int Function(
   Pointer<ffi.Utf8> buf,
   int length,
+);
+
+/// C function `load_page`.
+int load_page(
+  int port,
+  Pointer<ffi.Utf8> url,
+) {
+  return _load_page(port, url);
+}
+
+final _load_page_Dart _load_page =
+    _dl.lookupFunction<_load_page_C, _load_page_Dart>('load_page');
+typedef _load_page_C = Int32 Function(
+  Int64 port,
+  Pointer<ffi.Utf8> url,
+);
+typedef _load_page_Dart = int Function(
+  int port,
+  Pointer<ffi.Utf8> url,
 );
 
 /// C function `last_error_length`.
