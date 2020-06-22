@@ -122,7 +122,8 @@ and after that, the build script build our rust crate for all of these targets u
 and symbol link our rust lib to the right place, and it just works :)
 
 ## See also
-
+- [Dart Meets Rust: a match made in heaven ✨](https://dev.to/sunshine-chain/dart-meets-rust-a-match-made-in-heaven-9f5)
+- [Dart and Rust: the async story 🔃](https://dev.to/sunshine-chain/rust-and-dart-the-async-story-3adk)
 - https://github.com/brickpop/flutter-rust-ffi
 - https://dart.dev/guides/libraries/c-interop
 - https://flutter.dev/docs/development/platform-integration/c-interop
