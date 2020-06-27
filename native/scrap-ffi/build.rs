@@ -23,6 +23,7 @@ fn main() {
         .with_src_header("binding.h")
         .with_lib_name("libscrap")
         .with_config(config)
+        .with_allo_isolate()
         .build()
         .unwrap();
     // generate the dart code and get the bindings back

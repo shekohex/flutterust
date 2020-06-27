@@ -65,10 +65,7 @@ pub unsafe extern "C" fn error_message_utf8(buf: *mut raw::c_char, length: i32) 
 pub extern "C" fn load_page(port: i64, url: *const raw::c_char) -> i32 {
     let rt = runtime!();
     let url = cstr!(url);
-    rt.spawn(async move {
-        let result = scrap::load_page(url).await;
-        let isolate = Isolate::new(port);
-        isolate.post(result);
-    });
+    let t = Isolate::new(port).task(scrap::load_page(url));
+    rt.spawn(t);
     1
 }

@@ -1,8 +1,8 @@
 /// bindings for `libscrap`
 
-import 'dart:ffi';
-import 'package:ffi/ffi.dart' as ffi;
 import 'dart:io';
+import 'package:ffi/ffi.dart' as ffi;
+import 'dart:ffi';
 
 // ignore_for_file: unused_import, camel_case_types, non_constant_identifier_names
 final DynamicLibrary _dl = _open();
@@ -19,10 +19,7 @@ int error_message_utf8(
 ) {
   return _error_message_utf8(buf, length);
 }
-
-final _error_message_utf8_Dart _error_message_utf8 =
-    _dl.lookupFunction<_error_message_utf8_C, _error_message_utf8_Dart>(
-        'error_message_utf8');
+final _error_message_utf8_Dart _error_message_utf8 = _dl.lookupFunction<_error_message_utf8_C, _error_message_utf8_Dart>('error_message_utf8');
 typedef _error_message_utf8_C = Int32 Function(
   Pointer<ffi.Utf8> buf,
   Int32 length,
@@ -32,6 +29,14 @@ typedef _error_message_utf8_Dart = int Function(
   int length,
 );
 
+/// C function `last_error_length`.
+int last_error_length() {
+  return _last_error_length();
+}
+final _last_error_length_Dart _last_error_length = _dl.lookupFunction<_last_error_length_C, _last_error_length_Dart>('last_error_length');
+typedef _last_error_length_C = Int32 Function();
+typedef _last_error_length_Dart = int Function();
+
 /// C function `load_page`.
 int load_page(
   int port,
@@ -39,9 +44,7 @@ int load_page(
 ) {
   return _load_page(port, url);
 }
-
-final _load_page_Dart _load_page =
-    _dl.lookupFunction<_load_page_C, _load_page_Dart>('load_page');
+final _load_page_Dart _load_page = _dl.lookupFunction<_load_page_C, _load_page_Dart>('load_page');
 typedef _load_page_C = Int32 Function(
   Int64 port,
   Pointer<ffi.Utf8> url,
@@ -51,31 +54,16 @@ typedef _load_page_Dart = int Function(
   Pointer<ffi.Utf8> url,
 );
 
-/// C function `last_error_length`.
-int last_error_length() {
-  return _last_error_length();
-}
-
-final _last_error_length_Dart _last_error_length =
-    _dl.lookupFunction<_last_error_length_C, _last_error_length_Dart>(
-        'last_error_length');
-typedef _last_error_length_C = Int32 Function();
-typedef _last_error_length_Dart = int Function();
-
-// THIS ADDED BY ME, dart-bingen has to integrate with `allo-isolate`
-
 /// C function `store_dart_post_cobject`.
-Pointer store_dart_post_cobject(
-    Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr) {
-  return _store_dart_post_cobject(ptr);
+void store_dart_post_cobject(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
+) {
+  _store_dart_post_cobject(ptr);
 }
-
-final _store_dart_post_cobject = _dl
-    .lookupFunction<_store_dart_post_cobject_C, _store_dart_post_cobject_Dart>(
-  'store_dart_post_cobject',
+final _store_dart_post_cobject_Dart _store_dart_post_cobject = _dl.lookupFunction<_store_dart_post_cobject_C, _store_dart_post_cobject_Dart>('store_dart_post_cobject');
+typedef _store_dart_post_cobject_C = Void Function(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
 );
-
-typedef _store_dart_post_cobject_C = Pointer Function(
-    Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>);
-typedef _store_dart_post_cobject_Dart = Pointer Function(
-    Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>>);
+typedef _store_dart_post_cobject_Dart = void Function(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
+);
