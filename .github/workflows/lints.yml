@@ -39,6 +39,16 @@ jobs:
           command: fmt
           args: --all -- --check
 
+      - name: Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Run cargo clippy
         uses: actions-rs/cargo@v1
         continue-on-error: false
