@@ -7,6 +7,20 @@ jobs:
     name: Clippy + rustfmt
     runs-on: ubuntu-latest
     steps:
+      - name: Cache LLVM and Clang
+        id: cache-llvm
+        uses: actions/cache@v2
+        with:
+          path: ${{ runner.temp }}/llvm/10.0
+          key: cached-llvm-10.0
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: '10.0'
+          directory: ${{ runner.temp }}/llvm/10.0
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+
       - name: Checkout sources
         uses: actions/checkout@v2
 
