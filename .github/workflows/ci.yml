@@ -40,35 +40,39 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v1
 
-      - name: Setup Android NDK (Location)
-        run: mkdir /tmp/toolchains
+      - name: Cache NDK
+        id: cache-ndk
+        uses: actions/cache@v2
+        with:
+          path: ${{ ANDROID_SDK_ROOT }}/ndk-bundle
+          key: cached-ndk
 
       - name: Install Android NDK
+        if: steps.cache-ndk.outputs.cache-hit != 'true'
         run: $ANDROID_SDK_ROOT/tools/bin/sdkmanager ndk-bundle
 
-      - name: Android NDK Env (before)
-        run: echo $ANDROID_NDK_HOME
-
-      - name: Inspect Android NDK
-        run: ls $ANDROID_SDK_ROOT && ls ${ANDROID_SDK_ROOT}/ndk-bundle
       - name: Set Android NDK Env
         run: echo '::set-env name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle'
 
-      - name: Set Android NDK Env (2)
-        run: echo '::set-env name=ANDROID_NDK_HOME2::${!ANDROID_SDK_ROOT}/ndk-bundle'
-
-      - name: Android NDK Env(after)
-        run: echo $ANDROID_NDK_HOME2 && echo $ANDROID_NDK_HOME
-
       - name: Install Android Targets
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+
+      - name: Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install Cargo Make
         uses: actions-rs/cargo@v1
         continue-on-error: false
         with:
           command: install
-          args: --force cargo-make
+          args: cargo-make
 
       - name: Run cargo make android
         uses: actions-rs/cargo@v1
