@@ -12,7 +12,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.temp }}/llvm/10.0
-          key: cached-llvm-10.0
+          key: ${{ runner.os }}-cached-llvm-10.0
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/android/ndk-bundle
-          key: cached-ndk
+          key: ${{ runner.os }}-ndk
 
       - name: Install Android NDK
         if: steps.cache-ndk.outputs.cache-hit != 'true'
