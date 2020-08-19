@@ -50,10 +50,10 @@ jobs:
         run: echo $ANDROID_NDK_HOME
 
       - name: Inspect Android NDK
-        run: ls $ANDROID_SDK_ROOT/ndk
+        run: ls $ANDROID_SDK_ROOT && ls $ANDROID_SDK_ROOT/ndk-bundle
 
       - name: Set Android NDK Env
-        run: echo '::set-env name=ANDROID_NDK_HOME::$ANDROID_SDK_ROOT/ndk'
+        run: echo '::set-env name=ANDROID_NDK_HOME::$ANDROID_SDK_ROOT/ndk-bundle'
 
       - name: Android NDK Env(after)
         run: echo $ANDROID_NDK_HOME
