@@ -44,7 +44,7 @@ jobs:
         id: cache-ndk
         uses: actions/cache@v2
         with:
-          path: ${{ ANDROID_SDK_ROOT }}/ndk-bundle
+          path: /home/runner/android/ndk-bundle
           key: cached-ndk
 
       - name: Install Android NDK
