@@ -52,7 +52,7 @@ jobs:
           force: true
 
       - name: Set Android NDK Env
-        run: echo '::set-env name=ANDROID_NDK_HOME::/tmp/toolchains'
+        run: echo '::set-env name=ANDROID_NDK_HOME::/tmp'
 
       - name: Install Android Targets
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
