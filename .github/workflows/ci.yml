@@ -50,13 +50,15 @@ jobs:
         run: echo $ANDROID_NDK_HOME
 
       - name: Inspect Android NDK
-        run: ls $ANDROID_SDK_ROOT && ls $ANDROID_SDK_ROOT/ndk-bundle
-
+        run: ls $ANDROID_SDK_ROOT && ls ${ANDROID_SDK_ROOT}/ndk-bundle
       - name: Set Android NDK Env
-        run: echo '::set-env name=ANDROID_NDK_HOME::$ANDROID_SDK_ROOT/ndk-bundle'
+        run: echo '::set-env name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle'
+
+      - name: Set Android NDK Env (2)
+        run: echo '::set-env name=ANDROID_NDK_HOME2::${!ANDROID_SDK_ROOT}/ndk-bundle'
 
       - name: Android NDK Env(after)
-        run: echo $ANDROID_NDK_HOME
+        run: echo $ANDROID_NDK_HOME2 && echo $ANDROID_NDK_HOME
 
       - name: Install Android Targets
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
