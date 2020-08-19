@@ -80,3 +80,14 @@ jobs:
         with:
           command: make
           args: android
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      - name: Run Flutter pub get
+        run: flutter pub get
+
+      - name: Build APK (Fat, Debug)
+        run: flutter build apk --debug

@@ -58,3 +58,14 @@ jobs:
         with:
           command: make
           args: ios
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      - name: Run Flutter pub get
+        run: flutter pub get
+
+      - name: Build iOS App (Simulator, Debug)
+        run: flutter build ios --debug --no-codesign --simulator
