@@ -1,11 +1,13 @@
 /// bindings for `libaddr`
 
 import 'dart:ffi';
-import 'package:ffi/ffi.dart' as ffi;
 import 'dart:io';
+import 'package:ffi/ffi.dart' as ffi;
 
 // ignore_for_file: unused_import, camel_case_types, non_constant_identifier_names
 final DynamicLibrary _dl = _open();
+/// Reference to the Dynamic Library, it should be only used for low-level access
+final DynamicLibrary dl = _dl;
 DynamicLibrary _open() {
   if (Platform.isAndroid) return DynamicLibrary.open('libadder_ffi.so');
   if (Platform.isIOS) return DynamicLibrary.executable();

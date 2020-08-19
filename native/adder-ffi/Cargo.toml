@@ -6,11 +6,11 @@ edition = "2018"
 
 [lib]
 name = "adder_ffi"
-crate-type = ["cdylib", "staticlib"]
+crate-type = ["rlib"]
 
 [dependencies]
 adder = { path = "../adder" }
 
 [build-dependencies]
-cbindgen = "0.14.2"
-dart-bindgen = "0.1"
+cbindgen = "0.14.3"
+dart-bindgen = "0.1.7"

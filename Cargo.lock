@@ -10,7 +10,7 @@ version = "0.1.0"
 dependencies = [
  "adder 0.1.0",
  "cbindgen 0.14.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "dart-bindgen 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dart-bindgen 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -23,7 +23,7 @@ dependencies = [
 
 [[package]]
 name = "allo-isolate"
-version = "0.1.2"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -115,16 +115,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "clang"
-version = "0.23.0"
+version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "clang-sys 0.28.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clang-sys 0.29.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.69 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "clang-sys"
-version = "0.28.1"
+version = "0.29.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "glob 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -147,10 +147,10 @@ dependencies = [
 
 [[package]]
 name = "dart-bindgen"
-version = "0.1.1"
+version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "clang 0.23.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clang 0.24.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror 1.0.20 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -728,9 +728,9 @@ dependencies = [
 name = "scrap-ffi"
 version = "0.1.0"
 dependencies = [
- "allo-isolate 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "allo-isolate 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "cbindgen 0.14.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "dart-bindgen 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dart-bindgen 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "ffi_helpers 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scrap 0.1.0",
@@ -1158,7 +1158,7 @@ dependencies = [
 
 [metadata]
 "checksum addr2line 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a49806b9dadc843c61e7c97e72490ad7f7220ae249012fbda9ad0609457c0543"
-"checksum allo-isolate 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "8032c5503fb53c63764dba5da33cd04a87e5098b5099c1b8d093fda0f813addb"
+"checksum allo-isolate 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)" = "eea2c1a4b084f8eb5c41d89b498cb67f300d065870773bdadf5fa45fef4e97dd"
 "checksum ansi_term 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ee49baf6cb617b853aa8d93bf420db2383fab46d314482ca2803b40d5fde979b"
 "checksum atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)" = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
 "checksum autocfg 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
@@ -1171,10 +1171,10 @@ dependencies = [
 "checksum cbindgen 0.14.3 (registry+https://github.com/rust-lang/crates.io-index)" = "e6e03a705df2e735cc5486f104a48e25a8f72ae06eaea5b7753a81270ed00859"
 "checksum cc 1.0.54 (registry+https://github.com/rust-lang/crates.io-index)" = "7bbb73db36c1246e9034e307d0fba23f9a2e251faa47ade70c1bd252220c8311"
 "checksum cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)" = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
-"checksum clang 0.23.0 (registry+https://github.com/rust-lang/crates.io-index)" = "edaa418fdc81a329f3c8258a4e8776f7d2c31682147c5bda1c5c37ab8e818114"
-"checksum clang-sys 0.28.1 (registry+https://github.com/rust-lang/crates.io-index)" = "81de550971c976f176130da4b2978d3b524eaa0fd9ac31f3ceb5ae1231fb4853"
+"checksum clang 0.24.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5f4d78574d27fc037d9079fbd79a4b092e0ccb6a806756ded47e77e8639a03bd"
+"checksum clang-sys 0.29.3 (registry+https://github.com/rust-lang/crates.io-index)" = "fe6837df1d5cba2397b835c8530f51723267e16abbf83892e9e5af4f0e5dd10a"
 "checksum clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5067f5bb2d80ef5d68b4c87db81601f0b75bca627bc2ef76b141d7b846a3c6d9"
-"checksum dart-bindgen 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "e0bdf9e176897030c5a4182e1c7a5f303b3bce1272f92e572b3192069c85ab8b"
+"checksum dart-bindgen 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "d07747608f825e97ccb9db54868c31f80c3cce68532b7868da445ddbaa361c55"
 "checksum dtoa 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "4358a9e11b9a09cf52383b451b49a169e8d797b68aa02301ff586d70d9661ea3"
 "checksum encoding_rs 0.8.23 (registry+https://github.com/rust-lang/crates.io-index)" = "e8ac63f94732332f44fe654443c46f6375d1939684c17b0afb6cb56b0456e171"
 "checksum failure 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)" = "d32e9bd16cc02eae7db7ef620b392808b89f6a5e16bb3497d159c6b92a0f4f86"

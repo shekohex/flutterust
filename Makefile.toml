@@ -2,37 +2,80 @@
 CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 CARGO_MAKE_WORKSPACE_INCLUDE_MEMBERS = ["native/adder-ffi", "native/scrap-ffi"]
 ANDROID_PLATFORM_VERSION = "28"
+LIB_OUT_DIR = "debug"
+TARGET_OS = "unknown"
+DEV = true
+RELEASE = false
+
+[env.release]
+RELEASE = true
+DEV = false
+LIB_OUT_DIR = "release"
 
 [tasks.test-flow]
 disabled = true
 
+[tasks.android-dev]
+description = "development android x86_64 emulator"
+category = "Build"
+dependencies = [
+  "setup-crate-type-android",
+  "pre-android",
+  "android-x86_64",
+  "android-x86_64-release",
+  "post-android-x86_64",
+  "post-android",
+  ]
+
+[tasks.android-arm]
+description = "build android ARM64 for actual device"
+category = "Build"
+dependencies = [
+  "setup-crate-type-android",
+  "pre-android",
+  "android-aarch64",
+  "android-aarch64-release",
+  "post-android-aarch64",
+  "post-android",
+  ]
+
+
 [tasks.build]
 description = "Runs the rust compiler."
 category = "Build"
-command = "cargo"
-args = ["build", "--all-features"]
 dependencies = ["android"]
 
 [tasks.build.mac]
 description = "Runs the rust compiler."
 category = "Build"
-command = "cargo"
-args = ["build", "--all-features"]
-dependencies = ["android", "ios", "post-ios"]
+dependencies = ["android", "ios", "ios-release", "post-ios"]
 
 [tasks.ios]
-condition = { platforms = ["mac"] }
+condition = { platforms = ["mac"], env_true = ["DEV"] }
 description = "Build ios targets."
 category = "Build"
 command = "cargo"
 args = ["lipo"]
+dependencies = [
+    "setup-crate-type-ios",
+]
+
+[tasks.ios-release]
+condition = { platforms = ["mac"], env_true = ["RELEASE"] }
+description = "Build ios targets."
+category = "Build"
+command = "cargo"
+args = ["lipo", "--release"]
+dependencies = [
+    "setup-crate-type-ios",
+]
 
 [tasks.post-ios]
-condition = { platforms = ["mac"] }
 script_runner = "@duckscript"
+condition = { platforms = ["mac"] }
 script = [
     """
-    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/universal/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.a \
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/universal/${LIB_OUT_DIR}/lib${CARGO_MAKE_CRATE_FS_NAME}.a \
     ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/ios/lib${CARGO_MAKE_CRATE_FS_NAME}.a
     """,
     """
@@ -40,84 +83,202 @@ script = [
     ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/ios/Classes/binding.h
     """,
 ]
+dependencies = ["restore-crate-type"]
 
 [tasks.android]
 description = "Build android targets."
 category = "Build"
 dependencies = [
+    "setup-crate-type-android",
     "pre-android",
     "android-aarch64",
+    "android-aarch64-release",
     "post-android-aarch64",
     "android-armv7",
+    "android-armv7-release",
     "post-android-armv7",
     "android-i686",
+    "android-i686-release",
     "post-android-i686",
+    "android-x86_64",
+    "android-x86_64-release",
+    "post-android-x86_64",
+    "post-android"
+]
+
+[tasks.android-build]
+private = true
+condition = { env_true = ["DEV"], env_set = ["ANDROID_TARGET"] }
+command = "cargo"
+args = [
+  "ndk", 
+  "--platform", 
+  "${ANDROID_PLATFORM_VERSION}", 
+  "--target", 
+  "${ANDROID_TARGET}", 
+  "build",
+]
+
+[tasks.android-build-release]
+private = true
+condition = { env_true = ["RELEASE"], env_set = ["ANDROID_TARGET"] }
+command = "cargo"
+args = [
+  "ndk", 
+  "--platform", 
+  "${ANDROID_PLATFORM_VERSION}", 
+  "--target", 
+  "${ANDROID_TARGET}", 
+  "build",
+  "--release"
 ]
 
 [tasks.android-aarch64]
-command = "cargo"
-args = [
-  "ndk", 
-  "--platform", 
-  "${ANDROID_PLATFORM_VERSION}", 
-  "--target", 
-  "aarch64-linux-android", 
-  "build",
-  ]
+private = true
+condition = { env_true = ["DEV"] }
+env = { ANDROID_TARGET = "aarch64-linux-android" }
+run_task = "android-build"
 
 [tasks.android-armv7]
-command = "cargo"
-args = [
-  "ndk", 
-  "--platform", 
-  "${ANDROID_PLATFORM_VERSION}", 
-  "--target", 
-  "armv7-linux-androideabi", 
-  "build",
-  ]
+private = true
+condition = { env_true = ["DEV"] }
+env = { ANDROID_TARGET = "armv7-linux-androideabi" }
+run_task = "android-build"
 
 [tasks.android-i686]
-command = "cargo"
-args = [
-  "ndk", 
-  "--platform", 
-  "${ANDROID_PLATFORM_VERSION}", 
-  "--target", 
-  "i686-linux-android", 
-  "build"
-  ]
+private = true
+condition = { env_true = ["DEV"] }
+env = { ANDROID_TARGET = "i686-linux-android" }
+run_task = "android-build"
+
+[tasks.android-x86_64]
+private = true
+condition = { env_true = ["DEV"] }
+env = { ANDROID_TARGET = "x86_64-linux-android" }
+run_task = "android-build"
+
+[tasks.android-aarch64-release]
+private = true
+condition = { env_true = ["RELEASE"] }
+env = { ANDROID_TARGET = "aarch64-linux-android" }
+run_task = "android-build-release"
+
+[tasks.android-armv7-release]
+private = true
+condition = { env_true = ["RELEASE"] }
+env = { ANDROID_TARGET = "armv7-linux-androideabi" }
+run_task = "android-build-release"
+
+[tasks.android-i686-release]
+private = true
+condition = { env_true = ["RELEASE"] }
+env = { ANDROID_TARGET = "i686-linux-android" }
+run_task = "android-build-release"
+
+  
+[tasks.android-x86_64-release]
+private = true
+condition = { env_true = ["RELEASE"] }
+env = { ANDROID_TARGET = "x86_64-linux-android" }
+run_task = "android-build-release"
 
 [tasks.pre-android]
+private = true
 script_runner = "@duckscript"
 script = [
     "mkdir ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a",
     "mkdir ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a",
     "mkdir ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86",
+    "mkdir ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86_64",
 ]
 
-[tasks.post-android-aarch64]
+[tasks.copy-lib]
+private = true
+condition = { env_set = ["ANDROID_TARGET", "JNI_LIB_DIR"] }
 script_runner = "@duckscript"
 script = [
     """
-    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/aarch64-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
-    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/arm64-v8a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/${ANDROID_TARGET}/${LIB_OUT_DIR}/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/${JNI_LIB_DIR}/lib${CARGO_MAKE_CRATE_FS_NAME}.so
     """,
 ]
 
+[tasks.post-android-aarch64]
+private = true
+env = { ANDROID_TARGET = "aarch64-linux-android", JNI_LIB_DIR = "arm64-v8a" }
+run_task = "copy-lib"
+
 [tasks.post-android-armv7]
-script_runner = "@duckscript"
-script = [
-  """
-  cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/armv7-linux-androideabi/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
-  ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/armeabi-v7a/lib${CARGO_MAKE_CRATE_FS_NAME}.so
-  """,
-]
+private = true
+env = { ANDROID_TARGET = "armv7-linux-androideabi", JNI_LIB_DIR = "armeabi-v7a" }
+run_task = "copy-lib"
 
 [tasks.post-android-i686]
+private = true
+env = { ANDROID_TARGET = "i686-linux-android", JNI_LIB_DIR = "x86" }
+run_task = "copy-lib"
+
+
+[tasks.post-android-x86_64]
+private = true
+env = { ANDROID_TARGET = "x86_64-linux-android", JNI_LIB_DIR = "x86_64" }
+run_task = "copy-lib"
+
+[tasks.post-android]
+dependencies = ["restore-crate-type"]
+
+[tasks.setup-crate-type-android]
+private = true
+env = { TARGET_OS = "android" }
+run_task = "setup-crate-type"
+
+[tasks.setup-crate-type-ios]
+private = true
+env = { TARGET_OS = "ios" }
+run_task = "setup-crate-type"
+
+[tasks.setup-crate-type]
+private = true
 script_runner = "@duckscript"
 script = [
     """
-    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/target/i686-linux-android/debug/lib${CARGO_MAKE_CRATE_FS_NAME}.so \
-    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/android/src/main/jniLibs/x86/lib${CARGO_MAKE_CRATE_FS_NAME}.so
+    toml = readfile ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/Cargo.toml
+    crate_type = set ""
+    os = get_env TARGET_OS
+    is_android = eq ${os} "android"
+    is_ios = eq ${os} "ios"
+    if ${is_android}
+      crate_type = set "cdylib"
+    elseif ${is_ios}
+      crate_type = set "staticlib"
+    else
+      crate_type = set "rlib"
+    end
+    val = replace ${toml} "rlib" ${crate_type}
+    result = writefile ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/Cargo.toml ${val}
+    assert ${result}
+    """,
+]
+
+[tasks.restore-crate-type]
+private = true
+script_runner = "@duckscript"
+script = [
+    """
+    toml = readfile ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/Cargo.toml
+    crate_type = set ""
+    os = get_env TARGET_OS
+    is_android = eq ${os} "android"
+    is_ios = eq ${os} "ios"
+    if ${is_android}
+      crate_type = set "cdylib"
+    elseif ${is_ios}
+      crate_type = set "staticlib"
+    else
+      crate_type = set "rlib"
+    end
+    val = replace ${toml} ${crate_type} "rlib"
+    result = writefile ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/Cargo.toml ${val}
+    assert ${result}
     """,
 ]
