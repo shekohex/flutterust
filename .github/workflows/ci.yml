@@ -62,7 +62,7 @@ jobs:
         continue-on-error: false
         with:
           command: install
-          args: --froce cargo-make
+          args: --force cargo-make
 
       - name: Run cargo make android
         uses: actions-rs/cargo@v1
