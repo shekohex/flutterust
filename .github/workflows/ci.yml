@@ -44,15 +44,19 @@ jobs:
         run: mkdir /tmp/toolchains
 
       - name: Install Android NDK
-        uses: ravinderjangra/android-ndk-toolchain-setup@0.2
-        with:
-          api: '28'
-          arch: 'x86'
-          install-location: '/tmp/toolchains'
-          force: true
+        run: $ANDROID_SDK_ROOT/tools/bin/sdkmanager ndk-bundle
+
+      - name: Android NDK Env (before)
+        run: echo $ANDROID_NDK_HOME
+
+      - name: Inspect Android NDK
+        run: ls $ANDROID_SDK_ROOT/ndk
 
       - name: Set Android NDK Env
-        run: echo '::set-env name=ANDROID_NDK_HOME::/tmp'
+        run: echo '::set-env name=ANDROID_NDK_HOME::$ANDROID_SDK_ROOT/ndk'
+
+      - name: Android NDK Env(after)
+        run: echo $ANDROID_NDK_HOME
 
       - name: Install Android Targets
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
