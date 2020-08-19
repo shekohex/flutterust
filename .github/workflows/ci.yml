@@ -1,10 +1,10 @@
 on: [push, pull_request]
 
-name: iOS CI
+name: CI (Android, iOS)
 
 jobs:
-  android:
-    name: Compile iOS
+  build:
+    name: Compile And Build
     runs-on: macos-latest
     steps:
       - name: Cache LLVM and Clang
@@ -32,8 +32,30 @@ jobs:
           override: true
           components: rustfmt
 
-      - name: Install iOS Targets
-        run: rustup target add aarch64-apple-ios x86_64-apple-ios
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v1
+
+      - name: Cache NDK
+        id: cache-ndk
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/android/ndk-bundle
+          key: cached-ndk
+
+      - name: Install Android NDK
+        if: steps.cache-ndk.outputs.cache-hit != 'true'
+        run: $ANDROID_SDK_ROOT/tools/bin/sdkmanager ndk-bundle
+
+      - name: Set Android NDK Env
+        run: echo '::set-env name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle'
+
+      - name: Install Android Targets
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Cache Cargo
         uses: actions/cache@v2
@@ -47,10 +69,17 @@ jobs:
 
       - name: Install Cargo Make
         uses: actions-rs/cargo@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           command: install
           args: cargo-make
+
+      - name: Run cargo make android
+        uses: actions-rs/cargo@v1
+        continue-on-error: false
+        with:
+          command: make
+          args: android
 
       - name: Run cargo make ios
         uses: actions-rs/cargo@v1
@@ -66,6 +95,9 @@ jobs:
 
       - name: Run Flutter pub get
         run: flutter pub get
+
+      - name: Build APK (Fat, Debug)
+        run: flutter build apk --debug
 
       - name: Build iOS App (Simulator, Debug)
         run: flutter build ios --debug --no-codesign --simulator
