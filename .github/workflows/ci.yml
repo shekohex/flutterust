@@ -27,7 +27,7 @@ jobs:
         uses: android-actions/setup-android@v1
 
       - name: Setup Android NDK (Location)
-        runs: mkdir toolchains
+        run: mkdir toolchains
 
       - name: Install Android NDK
         uses: ravinderjangra/android-ndk-toolchain-setup@0.2
@@ -38,10 +38,10 @@ jobs:
           force: true
 
       - name: Inspect Android NDK
-        runs: ls toolchains
+        run: ls toolchains
 
       - name: Install Android Targets
-        runs: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Install Cargo Make
         uses: actions-rs/cargo@v1
