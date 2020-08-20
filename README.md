@@ -2,6 +2,9 @@
 
 Flutter + Rust = :heart:
 
+![Lints](https://github.com/shekohex/flutterust/workflows/Lints/badge.svg)
+![CI (Android, iOS)](<https://github.com/shekohex/flutterust/workflows/CI%20(Android,%20iOS)/badge.svg>)
+
 Using Rust libs from Flutter using [`dart:ffi`](https://dart.dev/guides/libraries/c-interop)
 
 It provides out-of-the box support for cross-compiling native Rust code for all available iOS and Android architectures and call it from plain Dart using [Foreign Function Interface](https://en.wikipedia.org/wiki/Foreign_function_interface).
