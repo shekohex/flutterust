@@ -3,8 +3,8 @@ on: [push, pull_request]
 name: CI (Android, iOS)
 
 jobs:
-  setup:
-    name: Setup
+  build:
+    name: Compile and Build (Android, iOS)
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -60,46 +60,45 @@ jobs:
       - name: Run Flutter pub get
         run: flutter pub get
 
-  android:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up JDK 1.8
+      - name: Set up JDK 1.8 (Android only)
         uses: actions/setup-java@v1
+        if: matrix.os == 'ubuntu-latest'
         with:
           java-version: 1.8
 
-      - name: Setup Android SDK
+      - name: Setup Android SDK (Android only)
+        if: matrix.os == 'ubuntu-latest'
         uses: android-actions/setup-android@v1
 
-      - name: Cache NDK
+      - name: Cache NDK (Android only)
+        if: matrix.os == 'ubuntu-latest'
         id: cache-ndk
         uses: actions/cache@v2
         with:
           path: /home/runner/android/ndk-bundle
           key: ${{ runner.os }}-ndk
 
-      - name: Install Android NDK
-        if: steps.cache-ndk.outputs.cache-hit != 'true'
+      - name: Install Android NDK (Android only)
+        if: steps.cache-ndk.outputs.cache-hit != 'true' && matrix.os == 'ubuntu-latest'
         run: $ANDROID_SDK_ROOT/tools/bin/sdkmanager ndk-bundle
 
-      - name: Set Android NDK Env
+      - name: Set Android NDK Env (Android only)
+        if: matrix.os == 'ubuntu-latest'
         run: echo '::set-env name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle'
 
-      - name: Install Android Targets
+      - name: Install Android Targets (Android only)
+        if: matrix.os == 'ubuntu-latest'
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
-      - name: Cache Cargo
-        uses: actions/cache@v2
+        - name: Run cargo make android
+        uses: actions-rs/cargo@v1
+        continue-on-error: false
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          command: make
+          args: android
 
       - name: Run cargo make android
+        if: matrix.os == 'ubuntu-latest'
         uses: actions-rs/cargo@v1
         continue-on-error: false
         with:
@@ -107,26 +106,15 @@ jobs:
           args: android
 
       - name: Build APK (Fat, Debug)
+        if: matrix.os == 'ubuntu-latest'
         run: flutter build apk --debug
 
-  ios:
-    needs: setup
-    runs-on: macos-latest
-    steps:
-      - name: Install iOS Targets
+      - name: Install iOS Targets (iOS only)
+        if: matrix.os == 'macos-latest'
         run: rustup target add aarch64-apple-ios x86_64-apple-ios
 
-      - name: Cache Cargo
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
       - name: Run cargo make ios
+        if: matrix.os == 'macos-latest'
         uses: actions-rs/cargo@v1
         continue-on-error: false
         with:
@@ -134,4 +122,5 @@ jobs:
           args: ios
 
       - name: Build iOS App (Simulator, Debug)
+        if: matrix.os == 'macos-latest'
         run: flutter build ios --debug --no-codesign --simulator
