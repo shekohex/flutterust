@@ -91,13 +91,6 @@ jobs:
         run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Run cargo make android
-        uses: actions-rs/cargo@v1
-        continue-on-error: false
-        with:
-          command: make
-          args: android
-
-      - name: Run cargo make android
         if: matrix.os == 'ubuntu-latest'
         uses: actions-rs/cargo@v1
         continue-on-error: false
