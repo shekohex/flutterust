@@ -117,3 +117,30 @@ jobs:
       - name: Build iOS App (Simulator, Debug)
         if: matrix.os == 'macos-latest'
         run: flutter build ios --debug --no-codesign --simulator
+
+      - name: Create Release (Android)
+        id: create_release
+        if: matrix.os == 'ubuntu-latest'
+        uses: ChanTsune/release-with-commit@v1.0.0
+        with:
+          regexp: "Release (\\d+([.]\\d+)*)\n*((\\s|\\S)+)"
+          regexp_options: 'us'
+          release_name: 'version $1'
+          tag_name: 'v$1'
+          body: '$3'
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
+
+      - name: Upload Release (Android)
+        id: upload-release-asset
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/app/outputs/flutter-apk/app-debug.apk
+          asset_name: apk-debug.apk
+          asset_content_type: application/octet-stream
