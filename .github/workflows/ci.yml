@@ -103,6 +103,9 @@ jobs:
     needs: setup
     runs-on: macos-latest
     steps:
+      - name: Install iOS Targets
+        run: rustup target add aarch64-apple-ios x86_64-apple-ios
+
       - name: Run cargo make ios
         uses: actions-rs/cargo@v1
         continue-on-error: false
