@@ -67,6 +67,20 @@ rustup target add aarch64-apple-ios x86_64-apple-ios
 cargo install cargo-make
 ```
 
+we also use [`dart-bindgen`](https://github.com/sunshine-protocol/dart-bindgen) which requires LLVM/Clang. Install LLVM (10+) in the following way:
+
+#### ubuntu/linux
+1. Install libclangdev - `sudo apt-get install libclang-dev`.
+
+#### Windows
+1. Install Visual Studio with C++ development support.
+2. Install [LLVM](https://releases.llvm.org/download.html) or `winget install -e --id LLVM.LLVM`.
+
+#### MacOS
+1. Install Xcode.
+2. Install LLVM - `brew install llvm`.
+
+
 ## Build and Test
 
 In the Root of the project simply run:
