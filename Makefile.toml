@@ -113,27 +113,27 @@ dependencies = [
 
 [tasks.android-build]
 private = true
-condition = { env_true = ["DEV"], env_set = ["ANDROID_TARGET"] }
+condition = { env_true = ["DEV"], env_set = ["ANDROID_BUILD_TARGET"] }
 command = "cargo"
 args = [
   "ndk", 
   "--platform", 
   "${ANDROID_PLATFORM_VERSION}", 
   "--target", 
-  "${ANDROID_TARGET}", 
+  "${ANDROID_BUILD_TARGET}", 
   "build",
 ]
 
 [tasks.android-build-release]
 private = true
-condition = { env_true = ["RELEASE"], env_set = ["ANDROID_TARGET"] }
+condition = { env_true = ["RELEASE"], env_set = ["ANDROID_BUILD_TARGET"] }
 command = "cargo"
 args = [
   "ndk", 
   "--platform", 
   "${ANDROID_PLATFORM_VERSION}", 
   "--target", 
-  "${ANDROID_TARGET}", 
+  "${ANDROID_BUILD_TARGET}", 
   "build",
   "--release"
 ]
@@ -141,50 +141,50 @@ args = [
 [tasks.android-aarch64]
 private = true
 condition = { env_true = ["DEV"] }
-env = { ANDROID_TARGET = "aarch64-linux-android" }
+env = { ANDROID_BUILD_TARGET = "arm64-v8a" }
 run_task = "android-build"
 
 [tasks.android-armv7]
 private = true
 condition = { env_true = ["DEV"] }
-env = { ANDROID_TARGET = "armv7-linux-androideabi" }
+env = { ANDROID_BUILD_TARGET = "armeabi-v7a" }
 run_task = "android-build"
 
 [tasks.android-i686]
 private = true
 condition = { env_true = ["DEV"] }
-env = { ANDROID_TARGET = "i686-linux-android" }
+env = { ANDROID_BUILD_TARGET = "x86" }
 run_task = "android-build"
 
 [tasks.android-x86_64]
 private = true
 condition = { env_true = ["DEV"] }
-env = { ANDROID_TARGET = "x86_64-linux-android" }
+env = { ANDROID_BUILD_TARGET = "x86_64" }
 run_task = "android-build"
 
 [tasks.android-aarch64-release]
 private = true
 condition = { env_true = ["RELEASE"] }
-env = { ANDROID_TARGET = "aarch64-linux-android" }
+env = { ANDROID_BUILD_TARGET = "arm64-v8a" }
 run_task = "android-build-release"
 
 [tasks.android-armv7-release]
 private = true
 condition = { env_true = ["RELEASE"] }
-env = { ANDROID_TARGET = "armv7-linux-androideabi" }
+env = { ANDROID_BUILD_TARGET = "armeabi-v7a" }
 run_task = "android-build-release"
 
 [tasks.android-i686-release]
 private = true
 condition = { env_true = ["RELEASE"] }
-env = { ANDROID_TARGET = "i686-linux-android" }
+env = { ANDROID_BUILD_TARGET = "x86" }
 run_task = "android-build-release"
 
   
 [tasks.android-x86_64-release]
 private = true
 condition = { env_true = ["RELEASE"] }
-env = { ANDROID_TARGET = "x86_64-linux-android" }
+env = { ANDROID_BUILD_TARGET = "x86_64" }
 run_task = "android-build-release"
 
 [tasks.pre-android]
