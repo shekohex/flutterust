@@ -1,8 +1,10 @@
 use dart_bindgen::{config::*, Codegen};
 fn main() {
     let crate_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let mut config = cbindgen::Config::default();
-    config.language = cbindgen::Language::C;
+    let config = cbindgen::Config {
+        language: cbindgen::Language::C,
+        ..Default::default()
+    };
     cbindgen::Builder::new()
         .with_crate(crate_dir)
         .with_config(config)
