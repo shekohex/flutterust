@@ -15,7 +15,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.temp }}/llvm/10.0
-          key: ${{ runner.os }}-cached-llvm-10.0
+          key: ${{ runner.os }}-cached-llvm-10.0-1
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
@@ -43,7 +43,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/bin
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-1
 
       - name: Install Cargo Make
         uses: actions-rs/cargo@v1
@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/android/ndk-bundle
-          key: ${{ runner.os }}-ndk
+          key: ${{ runner.os }}-ndk-1
 
       - name: Install Android NDK (Android only)
         if: steps.cache-ndk.outputs.cache-hit != 'true' && matrix.os == 'ubuntu-latest'
