@@ -68,7 +68,7 @@ jobs:
 
       - name: Setup Android SDK (Android only)
         if: matrix.os == 'ubuntu-latest'
-        uses: android-actions/setup-android@v1
+        uses: android-actions/setup-android@v2
 
       - name: Cache NDK (Android only)
         if: matrix.os == 'ubuntu-latest'
@@ -84,7 +84,7 @@ jobs:
 
       - name: Set Android NDK Env (Android only)
         if: matrix.os == 'ubuntu-latest'
-        run: echo '::set-env name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle'
+        run: echo 'name=ANDROID_NDK_HOME::/home/runner/android/ndk-bundle' >> $GITHUB_ENV
 
       - name: Install Android Targets (Android only)
         if: matrix.os == 'ubuntu-latest'
@@ -121,7 +121,7 @@ jobs:
       - name: Create Release (Android)
         id: create_release
         if: matrix.os == 'ubuntu-latest'
-        uses: ChanTsune/release-with-commit@v1.0.0
+        uses: ChanTsune/release-with-commit@v2.0.1
         with:
           regexp: "Release (\\d+([.]\\d+)*)\n*((\\s|\\S)+)"
           regexp_options: 'us'
@@ -135,7 +135,7 @@ jobs:
 
       - name: Upload Release (Android)
         id: upload-release-asset
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && steps.create_release.outputs.created == 'true'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
