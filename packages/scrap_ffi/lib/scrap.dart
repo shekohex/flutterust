@@ -12,7 +12,7 @@ class Scrap {
   }
 
   Future<String> loadPage(String url) {
-    var urlPointer = Utf8.toUtf8(url);
+    var urlPointer = url.toNativeUtf8();
     final completer = Completer<String>();
     final sendPort = singleCompletePort(completer);
     final res = native.load_page(
@@ -27,9 +27,9 @@ class Scrap {
 
   void _throwError() {
     final length = native.last_error_length();
-    final Pointer<Utf8> message = allocate(count: length);
+    final Pointer<Utf8> message = calloc.allocate(length);
     native.error_message_utf8(message, length);
-    final error = Utf8.fromUtf8(message);
+    final error = message.toDartString();
     print(error);
     throw error;
   }
