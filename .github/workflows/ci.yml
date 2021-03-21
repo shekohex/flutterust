@@ -100,7 +100,7 @@ jobs:
 
       - name: Build APK (Fat, Debug)
         if: matrix.os == 'ubuntu-latest'
-        run: flutter build apk --debug
+        run: flutter build apk --debug --no-sound-null-safety
 
       - name: Install iOS Targets (iOS only)
         if: matrix.os == 'macos-latest'
@@ -116,7 +116,7 @@ jobs:
 
       - name: Build iOS App (Simulator, Debug)
         if: matrix.os == 'macos-latest'
-        run: flutter build ios --debug --no-codesign --simulator
+        run: flutter build ios --debug --no-codesign --simulator --no-sound-null-safety
 
       - name: Create Release (Android)
         id: create_release
