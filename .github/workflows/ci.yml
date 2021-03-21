@@ -121,7 +121,7 @@ jobs:
       - name: Create Release (Android)
         id: create_release
         if: matrix.os == 'ubuntu-latest'
-        uses: ChanTsune/release-with-commit@v2.0.1
+        uses: ChanTsune/release-with-commit@v2.1.0
         with:
           regexp: "Release (\\d+([.]\\d+)*)\n*((\\s|\\S)+)"
           regexp_options: 'us'
