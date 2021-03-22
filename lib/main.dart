@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -26,14 +26,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  Scrap scrap;
-  Adder adder;
+  Scrap scrap = Scrap();
+  Adder adder = Adder();
 
   @override
   void initState() {
     super.initState();
-    adder = Adder();
-    scrap = Scrap();
     Scrap.setup();
   }
 
