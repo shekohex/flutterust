@@ -1,20 +1,9 @@
-
-
 fn main() {
     let crate_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-
-    let parse_extend_config = cbindgen::ParseExpandConfig {
-        crates: vec!["allo-isolate".into()],
-        all_features: true,
-        default_features: true,
-        ..Default::default()
-    };
 
     let parse_config = cbindgen::ParseConfig {
         parse_deps: true,
         include: Some(vec!["allo-isolate".into()]),
-        expand: parse_extend_config,
-        clean: true,
         extra_bindings: vec!["allo-isolate".into()],
         ..Default::default()
     };

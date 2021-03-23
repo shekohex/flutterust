@@ -1,4 +1,3 @@
-
 fn main() {
     let crate_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
     let config = cbindgen::Config {
@@ -11,6 +10,4 @@ fn main() {
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file("binding.h");
-
-    
 }
