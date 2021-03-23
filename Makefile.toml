@@ -55,6 +55,16 @@ script = [
 ]
 dependencies = ["android"]
 
+[tasks.copy-headers-ios]
+script_runner = "@duckscript"
+script = [
+    """
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/binding.h \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/binding.h
+    """,
+]
+dependencies = ["ios"]
+
 [tasks.ffigen]
 script = [
     """
@@ -63,6 +73,15 @@ script = [
     """,
 ]
 dependencies = ["copy-headers"]
+
+[tasks.ffigen-ios]
+script = [
+    """
+    cd ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}
+    dart run ffigen
+    """,
+]
+dependencies = ["copy-headers-ios"]
 
 
 [tasks.build.mac]
