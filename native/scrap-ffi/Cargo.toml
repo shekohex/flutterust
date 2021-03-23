@@ -6,7 +6,7 @@ edition = "2018"
 
 [lib]
 name = "scrap_ffi"
-crate-type = ["cdylib"]
+crate-type = ["rlib"]
 
 [dependencies]
 scrap = { path = "../scrap" }
