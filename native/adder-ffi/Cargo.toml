@@ -13,4 +13,3 @@ adder = { path = "../adder" }
 
 [build-dependencies]
 cbindgen = "0.14.3"
-dart-bindgen = "0.1.7"
