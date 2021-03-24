@@ -96,7 +96,7 @@ jobs:
         continue-on-error: false
         with:
           command: make
-          args: android
+          args: ffigen
 
       - name: Build APK (Fat, Debug)
         if: matrix.os == 'ubuntu-latest'
@@ -112,7 +112,7 @@ jobs:
         continue-on-error: false
         with:
           command: make
-          args: ios
+          args: ffigen-ios
 
       - name: Build iOS App (Simulator, Debug)
         if: matrix.os == 'macos-latest'
