@@ -26,16 +26,9 @@ jobs:
 
       - name: Checkout sources
         uses: actions/checkout@v2
-
-      - name: Install Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt
-
+        
       - name: Cache Cargo
+        id: cache-Cargo
         uses: actions/cache@v2
         with:
           path: |
@@ -44,6 +37,20 @@ jobs:
             ~/.cargo/bin
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt
+          
+      - name: Cache Cargo Make
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/bin/
+          key: ${{ runner.os }}-cargo-plugins
 
       - name: Install Cargo Make
         uses: actions-rs/cargo@v1
@@ -58,8 +65,9 @@ jobs:
           channel: 'stable'
 
       - name: Run Flutter pub get
-        run: flutter pub get
-
+        run: |
+            flutter pub get
+            echo "$FLUTTER_HOME/bin" >> $GITHUB_PATH
       - name: Set up JDK 1.8 (Android only)
         uses: actions/setup-java@v1
         if: matrix.os == 'ubuntu-latest'
@@ -117,30 +125,3 @@ jobs:
       - name: Build iOS App (Simulator, Debug)
         if: matrix.os == 'macos-latest'
         run: flutter build ios --debug --no-codesign --simulator --no-sound-null-safety
-
-      - name: Create Release (Android)
-        id: create_release
-        if: matrix.os == 'ubuntu-latest'
-        uses: ChanTsune/release-with-commit@v2.1.0
-        with:
-          regexp: "Release (\\d+([.]\\d+)*)\n*((\\s|\\S)+)"
-          regexp_options: 'us'
-          release_name: 'version $1'
-          tag_name: 'v$1'
-          body: '$3'
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
-
-      - name: Upload Release (Android)
-        id: upload-release-asset
-        if: matrix.os == 'ubuntu-latest' && steps.create_release.outputs.created == 'true'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/app/outputs/flutter-apk/app-debug.apk
-          asset_name: apk-debug.apk
-          asset_content_type: application/octet-stream
