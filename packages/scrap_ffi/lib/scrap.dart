@@ -1,21 +1,26 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'package:isolate/ports.dart';
+import 'package:flutter/services.dart';
+import 'binding.dart' as binding;
+import 'package:isolate/isolate.dart';
 
-import 'ffi.dart' as native;
+final scrap = binding.NativeLibrary(Platform.isAndroid | Platform.isLinux
+    ? DynamicLibrary.open("libscrap_ffi.so")
+    : DynamicLibrary.process());
 
 class Scrap {
   static setup() {
-    native.store_dart_post_cobject(NativeApi.postCObject);
+    scrap.store_dart_post_cobject(NativeApi.postCObject.address);
     print("Scrap Setup Done");
   }
 
   Future<String> loadPage(String url) {
-    var urlPointer = url.toNativeUtf8();
+    var urlPointer = url.toNativeUtf8().cast<Int8>();
     final completer = Completer<String>();
     final sendPort = singleCompletePort(completer);
-    final res = native.load_page(
+    final res = scrap.load_page(
       sendPort.nativePort,
       urlPointer,
     );
@@ -26,10 +31,10 @@ class Scrap {
   }
 
   void _throwError() {
-    final length = native.last_error_length();
-    final Pointer<Utf8> message = calloc.allocate(length);
-    native.error_message_utf8(message, length);
-    final error = message.toDartString();
+    final length = scrap.last_error_length();
+    final Pointer<Int8> message = calloc.allocate(length);
+    scrap.error_message_utf8(message, length);
+    final error = message.cast<Utf8>().toDartString();
     print(error);
     throw error;
   }

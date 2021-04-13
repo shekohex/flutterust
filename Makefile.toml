@@ -43,12 +43,51 @@ dependencies = [
 [tasks.build]
 description = "Runs the rust compiler."
 category = "Build"
+dependencies = ["android", "copy-headers", "ffigen"]
+
+[tasks.copy-headers]
+script_runner = "@duckscript"
+script = [
+    """
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/binding.h \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/binding.h
+    """,
+]
 dependencies = ["android"]
+
+[tasks.copy-headers-ios]
+script_runner = "@duckscript"
+script = [
+    """
+    cp ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/native/${CARGO_MAKE_CRATE_CURRENT_WORKSPACE_MEMBER}/binding.h \
+    ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}/binding.h
+    """,
+]
+dependencies = ["ios"]
+
+[tasks.ffigen]
+script = [
+    """
+    cd ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}
+    dart run ffigen
+    """,
+]
+dependencies = ["copy-headers"]
+
+[tasks.ffigen-ios]
+script = [
+    """
+    cd ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/packages/${CARGO_MAKE_CRATE_FS_NAME}
+    dart run ffigen
+    """,
+]
+dependencies = ["copy-headers-ios"]
+
 
 [tasks.build.mac]
 description = "Runs the rust compiler."
 category = "Build"
-dependencies = ["android", "ios"]
+dependencies = ["android", "ios", "copy-headers", "ffigen"]
 
 [tasks.ios]
 description = "build iOS targets"
