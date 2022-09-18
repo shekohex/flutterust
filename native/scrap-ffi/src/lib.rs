@@ -32,7 +32,7 @@ macro_rules! error {
 
 macro_rules! cstr {
     ($ptr:expr) => {
-        cstr!($ptr, 0);
+        cstr!($ptr, 0)
     };
     ($ptr:expr, $error:expr) => {{
         null_pointer_check!($ptr);
