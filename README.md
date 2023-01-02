@@ -92,7 +92,7 @@ cargo make
 Then run flutter app normally
 
 ```
-flutter run
+flutter run --no-sound-null-safety
 ```
 
 ## How it works?
